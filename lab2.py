@@ -18,11 +18,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 #ALGORITHM = "tf_net"
 ALGORITHM = "tf_conv"
 
-#DATASET = "mnist_d"
+DATASET = "mnist_d"
 #DATASET = "mnist_f"
 #DATASET = "cifar_10"
 #DATASET = "cifar_100_f"
-DATASET = "cifar_100_c"
+#DATASET = "cifar_100_c"
 
 if DATASET == "mnist_d":
     NUM_CLASSES = 10
@@ -43,13 +43,13 @@ elif DATASET == "cifar_10":
     IZ = 3
     IS = 32*32*3                                 # TODO: Add this case.
 elif DATASET == "cifar_100_f":
-    NUM_CLASSES = 20
+    NUM_CLASSES = 100
     IH = 32
     IW = 32
     IZ = 3
     IS = 32*32*3                                 # TODO: Add this case.
 elif DATASET == "cifar_100_c":
-    NUM_CLASSES = 100
+    NUM_CLASSES = 20
     IH = 32
     IW = 32
     IZ = 3
@@ -89,7 +89,12 @@ def buildTFConvNet(x, y, eps = 10, dropout = True, dropRate = 0.2):
     model.add(keras.layers.Conv2D(64, kernel_size = (3,3), activation="relu", padding="same"))
     model.add(keras.layers.Conv2D(64, kernel_size = (3,3), activation="relu", padding="same"))
     model.add(keras.layers.MaxPooling2D(pool_size = (2,2)))
-    model.add(keras.layers.Dropout(.2))
+    #model.add(keras.layers.Dropout(.2))
+
+    model.add(keras.layers.Conv2D(128, kernel_size = (3,3), activation="relu", padding="same"))
+    model.add(keras.layers.Conv2D(128, kernel_size = (3,3), activation="relu", padding="same"))
+    model.add(keras.layers.MaxPooling2D(pool_size = (2,2)))
+    model.add(keras.layers.Dropout(.2))    
 
     model.add(keras.layers.Flatten())
     model.add(keras.layers.Dense(300, activation = "relu"))
@@ -99,7 +104,7 @@ def buildTFConvNet(x, y, eps = 10, dropout = True, dropRate = 0.2):
     model.add(keras.layers.Dense(NUM_CLASSES, activation="softmax"))
 
     model.compile(optimizer="adam", loss=lossType)
-    model.fit(x,y,epochs=30)
+    model.fit(x,y, batch_size = 100, epochs=100)
     return model
 
 #=========================<Pipeline Functions>==================================
