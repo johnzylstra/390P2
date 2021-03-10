@@ -18,11 +18,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 #ALGORITHM = "tf_net"
 ALGORITHM = "tf_conv"
 
-DATASET = "mnist_d"
+#DATASET = "mnist_d"
 #DATASET = "mnist_f"
 #DATASET = "cifar_10"
 #DATASET = "cifar_100_f"
-#DATASET = "cifar_100_c"
+DATASET = "cifar_100_c"
 
 if DATASET == "mnist_d":
     NUM_CLASSES = 10
@@ -72,9 +72,9 @@ def buildTFNeuralNet(x, y, eps = 6):
     lossType = keras.losses.categorical_crossentropy
     model.add(keras.layers.Dense(512, activation = "relu"))
     model.add(keras.layers.Dropout(0.2))
-    model.add(keras.layers.Dense(10, activation = "softmax"))
+    model.add(keras.layers.Dense(NUM_CLASSES, activation = "softmax"))
     model.compile(optimizer = "adam", loss = lossType)
-    model.fit(x,y,epochs = eps)
+    model.fit(x,y, batch_size = 100, epochs = 100)
     return model
 
 
